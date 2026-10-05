@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: save-sonam-wangchuk
+  labels:
+    app.kubernetes.io/name: save-sonam-wangchuk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: save-sonam-wangchuk
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: save-sonam-wangchuk
+    spec:
+      containers:
+        - name: web
+          image: nginx:alpine
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 20
+          volumeMounts:
+            - name: site-content
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+              readOnly: true
+      volumes:
+        - name: site-content
+          configMap:
+            name: save-sonam-wangchuk-content

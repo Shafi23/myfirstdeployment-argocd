@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: save-sonam-wangchuk
+  labels:
+    app.kubernetes.io/name: save-sonam-wangchuk
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: save-sonam-wangchuk
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
